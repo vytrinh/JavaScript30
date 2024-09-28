@@ -59,7 +59,27 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  // Listen to a keydown events
+  window.addEventListener('keydown', (e) => {
+    // Play the audio associated with the key
+    // audio[data-key="${e.keyCode}"]
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play();
 
+    // Add animation to the key element
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    key.classList.add("playing");
+  });
+
+  // Listen to keyup events
+  window.addEventListener('keyup', (e) => {
+    // Remove animation to the key element
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if (!key) return;
+    key.classList.remove("playing");
+  });
 </script>
 
 
