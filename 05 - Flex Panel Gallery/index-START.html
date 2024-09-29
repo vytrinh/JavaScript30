@@ -27,6 +27,7 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
+      display: flex;
     }
 
     .panel {
@@ -44,19 +45,39 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
-    .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
-    .panel2 { background-image:url(https://source.unsplash.com/rFKUFzjPYiQ/1500x1500); }
+    .panel1 { background-image:url(./day.jpg); }
+    .panel2 { background-image:url(./leaf.jpg); }
     .panel3 { background-image:url(https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&w=1500&h=1500&fit=crop&s=967e8a713a4e395260793fc8c802901d); }
-    .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
-    .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
+    .panel4 { background-image:url(./dawn.jpg); }
+    .panel5 { background-image:url(./dusk.jpg); }
 
     /* Flex Children */
     .panel > * {
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+      flex: 1 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .panel > *:first-child {
+      transform: translateY(-100%);
+    }
+    .panel.open-active > *:first-child {
+      transform: translateY(0);
+    }
+    .panel > *:last-child {
+      transform: translateY(100%);
+    }
+    .panel.open-active > *:last-child {
+      transform: translateY(0);
     }
 
     .panel p {
@@ -71,6 +92,7 @@
     }
 
     .panel.open {
+      flex: 5;
       font-size: 40px;
     }
 
@@ -106,7 +128,27 @@
   </div>
 
   <script>
+    // When the panel is cliked on, add open and open active class to the element
+    // if the panel has open and open active, remove them
+    const panels = document.querySelectorAll('.panel');
 
+    // Important!!! Do not use arrow function
+    function toggleOpen() {
+      this.classList.toggle('open');
+    };
+
+    function toggleActive(e) {
+      // Because there are multiple CSS properties being transitioned
+      // We need to explicitly check for transition ended for flex/flexgrow
+      if (e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    };
+
+    // Clicking widen the panel
+    // Once windening is done, transition the p > *:first-child and and p > *:last-child in
+    panels.forEach((panel) => panel.addEventListener('click', toggleOpen));
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
   </script>
 
 
