@@ -97,6 +97,43 @@
   </div>
 
 <script>
+  let lastClickedId = null;
+  let isShiftKeyDown = false;
+
+  function handleShiftSelect(currentId) {
+    inputs.forEach((input, index) => {
+      const start = Math.min(lastClickedId, currentId);
+      const end = Math.max(lastClickedId, currentId);
+      if (index < start || index > end) return;
+      input.setAttribute('checked', true);
+    });
+  }
+
+  function handleInputClick(e) {
+    if (isShiftKeyDown) {
+      handleShiftSelect(e.target.dataset.id);
+    }
+    lastClickedId = e.target.dataset.id
+  }
+
+  const inputs = document.querySelectorAll('input[type=checkbox]');
+  inputs.forEach((input, index) => {
+    input.setAttribute('data-id', index);
+  });
+
+  inputs.forEach((input, index) => {
+    input.addEventListener('click', handleInputClick);
+  });
+
+  // Event listeners for Shift key
+  window.addEventListener('keydown', (e) => {
+    if (e.keyCode !== 16) return;
+    isShiftKeyDown = true;
+  })
+  window.addEventListener('keyup', (e) => {
+    if (e.keyCode !== 16) return;
+    isShiftKeyDown = false;
+  })
 </script>
 </body>
 </html>
