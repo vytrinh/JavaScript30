@@ -15,9 +15,57 @@
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script type="module">
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    // Fetch data from endpoint
+    async function fetchData() {
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
 
-</script>
+        return response.json();
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    const data = await fetchData();
+
+    // Helpers
+    function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    function getSuggestions(query) {
+      return data.filter(({ city, state }) => {
+        // Notes: Must use regex here as String.includes() is not case sensitive
+        const regex = new RegExp(query, 'gi');
+        return city.match(regex) || state.match(regex);
+      });
+    }
+
+    function handleInputChange(e) {
+      const suggestions = getSuggestions(this.value);
+
+      const suggestionsEl = document.querySelector('.suggestions');
+
+      const suggestionList = suggestions.map(({ city, state, population }) => {
+        const regex = new RegExp(this.value, 'gi');
+        const cityName = city.replace(regex, `<span class="hl">${this.value}</span>`);
+        const stateName = state.replace(regex, `<span class="hl">${this.value}</span>`);
+        return `
+          <li>
+            <span class="name">${cityName}, ${stateName}</span>
+            <span class="population">${numberWithCommas(population)}</span>
+          </li>
+        `;
+      }).join('');
+
+      suggestionsEl.innerHTML = suggestionList;
+    }
+
+    const searchInput = document.querySelector('.search');
+    searchInput.addEventListener('input', handleInputChange);
+  </script>
 </body>
 </html>
