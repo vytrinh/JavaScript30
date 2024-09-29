@@ -96,44 +96,32 @@
     </div>
   </div>
 
-<script>
-  let lastClickedId = null;
-  let isShiftKeyDown = false;
 
-  function handleShiftSelect(currentId) {
-    inputs.forEach((input, index) => {
-      const start = Math.min(lastClickedId, currentId);
-      const end = Math.max(lastClickedId, currentId);
-      if (index < start || index > end) return;
-      input.setAttribute('checked', true);
-    });
-  }
+  <script>
+    let lastClicked;
 
-  function handleInputClick(e) {
-    if (isShiftKeyDown) {
-      handleShiftSelect(e.target.dataset.id);
+    function handleInputClick(e) {
+      let isInBetween = false;
+      if (e.shiftKey && e.target.checked) {
+        // iterate through inputs and update isInBetween flag
+        inputs.forEach(input => {
+          if (input === lastClicked || input === e.target) {
+            isInBetween = !isInBetween
+          }
+          // Update .checked for all input elements with isInBetween flag as true
+          if (isInBetween) {
+            input.checked = true;
+          }
+        });
+      }
+      lastClicked = e.target // or lastClicked = this
     }
-    lastClickedId = e.target.dataset.id
-  }
 
-  const inputs = document.querySelectorAll('input[type=checkbox]');
-  inputs.forEach((input, index) => {
-    input.setAttribute('data-id', index);
-  });
+    const inputs = document.querySelectorAll('input[type=checkbox]');
 
-  inputs.forEach((input, index) => {
-    input.addEventListener('click', handleInputClick);
-  });
-
-  // Event listeners for Shift key
-  window.addEventListener('keydown', (e) => {
-    if (e.keyCode !== 16) return;
-    isShiftKeyDown = true;
-  })
-  window.addEventListener('keyup', (e) => {
-    if (e.keyCode !== 16) return;
-    isShiftKeyDown = false;
-  })
-</script>
+    inputs.forEach((input) => {
+      input.addEventListener('click', handleInputClick);
+    });
+  </script>
 </body>
 </html>
