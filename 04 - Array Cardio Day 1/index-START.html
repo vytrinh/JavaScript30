@@ -38,17 +38,40 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    const inventorBornIn1500s = inventors.filter(({ year }) => {
+      return year >= 1500 && year < 1600;
+    });
+    console.log(inventorBornIn1500s);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    const fullNames = inventors.map(({ first, last }) => {
+      return `${first} ${last}`;
+    });
+    console.log(fullNames);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const youngestToOldest = inventors.sort((a, b) => {
+      return b.year - a.year;
+    })
+    console.log(youngestToOldest);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    const accumulativeLifeSpan = inventors.reduce((accum, { year, passed }) => {
+      accum += passed - year;
+      return accum;
+    }, 0);
+    console.log(accumulativeLifeSpan);
 
     // 5. Sort the inventors by years lived
+    const longestAlive = inventors.sort((a, b) => {
+      const aLifeSpan = a.passed - a.year;
+      const bLifeSpan = b.passed - b.year;
+      return bLifeSpan - aLifeSpan;
+    });
+    console.log(longestAlive);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
@@ -56,10 +79,22 @@
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const sortedPeople = people.sort((a, b) => {
+      aLastName = a.split(', ')[0];
+      bLastName = b.split(', ')[0];
+      // console.log({aLastName, bLastName, sortVal: aLastName > bLastName});
+      return aLastName < bLastName ? -1 : 1;
+    });
+    console.log(sortedPeople);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const instances = data.reduce((accum, curr) => {
+      accum.set(curr, 1 + (accum.get(curr) || 0));
+      return accum;
+    }, new Map());
+    console.log(instances);
 
   </script>
 </body>
