@@ -16,12 +16,28 @@
     <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
-    <input id="base" type="color" name="base" value="#ffc600">
+    <input id="base" type="color" name="base" value="#030101">
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <img height="600px" width="800px" src="annie-spratt-a4799IDqkpw-unsplash.jpg">
 
   <style>
+    /* Declare some CSS variables */
+    :root {
+      --base: #030101;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
 
     /*
       misc styles, nothing to do with CSS variables
@@ -46,6 +62,19 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input');
+    console.log(inputs);
+
+    inputs.forEach(input => {
+      input.addEventListener('change', (e) => {
+        const variable = e.target.id;
+        const value = e.target.value;
+        const suffix = e.target.dataset?.sizing || '';
+
+        // Update CSS variable
+        document.documentElement.style.setProperty(`--${variable}`, `${value}${suffix}`);
+      })
+    })
   </script>
 
 </body>
