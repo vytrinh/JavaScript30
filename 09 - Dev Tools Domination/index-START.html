@@ -9,7 +9,7 @@
 
   <p onClick="makeGreen()">×BREAK×DOWN×</p>
 
-  <script>
+  <script type="module">
     const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
 
     function makeGreen() {
@@ -19,28 +19,59 @@
     }
 
     // Regular
+    console.log('hello, world');
 
     // Interpolated
 
     // Styled
 
     // warning!
+    console.warn('you\'re on thin ice, buddy');
 
     // Error :|
+    console.error('ya dead!')
 
     // Info
+    console.info('I am fun :)')
 
     // Testing
 
     // clearing
+    console.clear();
 
     // Viewing DOM Elements
+    const p = document.querySelector('p');
+    console.log(p);
+    console.dir(p);
 
     // Grouping together
+    dogs.forEach((dog) => {
+      console.group(`${dog.name}`);
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age}`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(`${dog.name}`);
+    });
 
     // counting
 
     // timing
+    console.time('fetching data');
+    const fetchData = async () => {
+      try {
+        const url = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+        return response.json();
+      } catch(err) {
+        console.error(err.message)
+      }
+    }
+    const data = await fetchData();
+    console.timeEnd('fetching data');
+    console.log(data);
 
   </script>
 </body>
